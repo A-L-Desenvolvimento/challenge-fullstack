@@ -8,7 +8,7 @@ Antes de "meter a mão na massa", leia com atenção todas as instruções abaix
 ## Primeira Etapa - API (backend)
 1 - Configuração Inicial:
 
-- Clone o repositório Git fornecido.
+- Crie um **fork** desse repositório.
 - Instale todas as dependências do projeto usando o Composer.
 - Crie um arquivo .env apropriado com base no arquivo .env.example fornecido e gere uma nova chave para a aplicação Laravel.
 
