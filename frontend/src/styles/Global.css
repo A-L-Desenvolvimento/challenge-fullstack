@@ -1,0 +1,110 @@
+html {
+    height: auto;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+body {
+    width: 100%;
+}
+
+.wrapper-home {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    flex-direction: column;
+}
+
+.wrapper-home .msg-home {
+    font-size: 45px;
+}
+
+.wrapper-home .btn-home a {
+    text-decoration: none;
+    padding: 5px 10px;
+    background-color: #6d6d9c;
+    color: white;
+    border-radius: 2px;
+}
+
+.wrapper-home .btn-home a:hover {
+    background-color: #606089;
+}
+
+.wrapper-home .btn-home {
+    margin-top: 10px;
+}
+
+.wrapper-product-list {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    flex-direction: column;
+}
+
+table{ 
+    width: 60%;
+    border-collapse: collapse;
+}
+
+table th{ 
+    background-color: gray;
+    color: white;
+    font-size: 18px;
+    padding: 5px 0px;
+    border: none;
+}
+
+table td{ 
+    text-align: center;
+    padding: 5px 0px;
+}
+
+table a { 
+    text-decoration: none;
+    padding: 2px 5px;
+    background-color: #6d6d9c;
+    color: white;
+    border-radius: 2px;
+}
+
+table a:hover {
+    background-color: #606089;
+}
+
+table tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+table tr:nth-child(odd) {
+    background-color: white;
+}
+
+.wrapper-product-details {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    flex-direction: column;
+}
+
+.return-btn a{
+    text-decoration: none;
+    padding: 5px 10px;
+    background-color: #6d6d9c;
+    color: white;
+    border-radius: 2px;
+}
+
+.return-btn a:hover {
+    background-color: #606089;
+}
+
+.return-btn {
+    text-align: left;
+    padding-bottom: 6px;
+}
