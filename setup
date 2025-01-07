@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+
+# copia o arquivo das variaveis de ambiente
+cp .env.example .env
+
+# sobe os conteineres do php/apache e postgres
+docker compose up -d
+
+# instala as dependencias
+docker exec -it challenge-fullstack composer install
+docker exec -it challenge-fullstack npm install
+
+# gera chave da aplicacao
+docker exec -it challenge-fullstack php artisan key:generate
+
+# altera as permissoes do projeto
+sudo chmod -R 777 storage
+
+# sobe as migrations e seeders
+docker exec -it challenge-fullstack php artisan migrate --seed
