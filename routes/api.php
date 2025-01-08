@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ProductController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -16,4 +17,17 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
+});
+
+Route::prefix("product")->controller(ProductController::class)->group(function () {
+    // rotas abertas
+    Route::get('/', 'list')->name('product.list');
+    Route::get('/{id}', 'show')->name('product.show');
+
+    // rotas protegidas por autenticacao
+    // Route::middleware('auth:sanctum')->group(function () {
+    Route::post('/', 'store')->name('product.store');
+    Route::put('/{id}', 'update')->name('product.update');
+    Route::delete('/destroy/{id}', 'destroy')->name('product.destroy');
+    // });
 });
