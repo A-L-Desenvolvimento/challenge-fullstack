@@ -12,7 +12,15 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
-        //
+        $middleware->web([
+            \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
+            // Aqui você pode adicionar outros middlewares para rotas web
+        ]);
+
+        $middleware->api([
+            \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
+            // Aqui você pode adicionar outros middlewares para rotas API
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //
