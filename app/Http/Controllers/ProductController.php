@@ -19,8 +19,17 @@ class ProductController extends Controller
     {
         $products = json_decode($this->apiProductController->list()->getContent());
 
-        return Inertia::render('Produtos', [
+        return Inertia::render('Product/List', [
             "products" => $products,
+        ]);
+    }
+
+    function show(string $id)
+    {
+        $product = json_decode($this->apiProductController->show($id)->getContent());
+
+        return Inertia::render('Product/Show', [
+            "product" => $product,
         ]);
     }
 }

@@ -10,7 +10,7 @@ import { Menu } from "primereact/menu";
 import { useRef } from "react";
 
 
-export default function Produtos({ auth, products }) {
+export default function ProductsList({ auth, products }) {
 
     const statusBodyTemplate = (rowData) => {
         const severity = rowData.active ? "success" : "danger";
@@ -26,7 +26,7 @@ export default function Produtos({ auth, products }) {
             {
                 label: 'Detalhes',
                 icon: 'pi pi-external-link',
-                url: `/produtos/${rowData.id}`
+                url: `/products/${rowData.id}`
             },
         ]
 

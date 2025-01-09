@@ -15,10 +15,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::redirect("/", "/produtos");
+Route::redirect("/", "/products");
 
-Route::prefix("/produtos")->controller(ProductController::class)->group(function () {
-    Route::get("/", "index")->name("produtos");
+Route::prefix("/products")->controller(ProductController::class)->group(function () {
+    Route::get("/", "index")->name("products.list");
+    Route::get("/{id}", "show")->name("products.show");
 });
 
 Route::middleware('auth')->group(function () {

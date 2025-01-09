@@ -15,7 +15,7 @@ export default function Guest({ children }) {
                 {children}
             </div>
 
-            <Link className='pt-6' href={route('produtos')}>
+            <Link className='pt-6' href={route('products.list')}>
                 <PrimaryButton>Acessar como Convidado</PrimaryButton>
             </Link>
         </div>
