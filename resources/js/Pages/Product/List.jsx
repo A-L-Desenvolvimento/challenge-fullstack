@@ -44,6 +44,7 @@ export default function ProductsList({ auth, products }) {
                 {
                     label: rowData.active ? 'Desativar' : 'Ativar',
                     icon: rowData.active ? 'pi pi-lock' : 'pi pi-lock-open',
+                    command: () => { showStatusDialog(rowData.id, rowData.active) }
                 },
                 {
                     label: 'Excluir',
@@ -59,6 +60,37 @@ export default function ProductsList({ auth, products }) {
                 <i className="pi pi-ellipsis-h" onClick={(event) => menu.current.toggle(event)} aria-controls="popup_menu" aria-haspopup style={{ fontSize: '1.4rem', cursor: 'pointer' }}></i>
             </>
         )
+    }
+
+    const showStatusDialog = (productId, productStatus) => {
+        confirmDialog({
+            group: 'templating',
+            header: 'Confirmar',
+            message: `Tem certeza que deseja ${productStatus ? 'desativar' : 'ativar'} esse produto?`,
+            icon: productStatus ? 'pi pi-lock' : 'pi pi-lock-open',
+            acceptLabel: 'Sim',
+            rejectLabel: 'Não',
+            accept: () => {
+                axios
+                    .put(
+                        route('api.product.update', { id: productId }),
+                        {
+                            active: !productStatus
+                        },
+                        {
+                            headers: {
+                                'Authorization': 'Bearer ' + auth.token
+                            }
+                        }
+                    )
+                    .then((response) => {
+                        window.location.reload()
+                    })
+                    .catch((error) => {
+                        toast.current.show({ severity: 'error', summary: 'Erro', detail: 'Não foi possível alterar o status do produto.', life: 3000 });
+                    })
+            },
+        });
     }
 
     const showDeleteDialog = (productId) => {

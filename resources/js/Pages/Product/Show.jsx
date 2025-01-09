@@ -9,6 +9,7 @@ import { Badge } from 'primereact/badge';
 import { Tag } from 'primereact/tag';
 import { Toast } from 'primereact/toast';
 import { confirmDialog, ConfirmDialog } from 'primereact/confirmdialog';
+import axios from 'axios';
 
 export default function ProductShow({ auth, product }) {
     const toast = useRef(null);
@@ -24,6 +25,7 @@ export default function ProductShow({ auth, product }) {
             {
                 label: product.active ? 'Desativar' : 'Ativar',
                 icon: product.active ? 'pi pi-lock' : 'pi pi-lock-open',
+                command: () => { showStatusDialog(product.id, product.active) }
             },
             {
                 label: 'Excluir',
@@ -38,6 +40,37 @@ export default function ProductShow({ auth, product }) {
                 <i className="pi pi-ellipsis-v" onClick={(event) => menu.current.toggle(event)} aria-controls="popup_menu" aria-haspopup style={{ cursor: 'pointer' }}></i>
             </div>
         );
+    }
+
+    const showStatusDialog = (productId, productStatus) => {
+        confirmDialog({
+            group: 'templating',
+            header: 'Confirmar',
+            message: `Tem certeza que deseja ${productStatus ? 'desativar' : 'ativar'} esse produto?`,
+            icon: productStatus ? 'pi pi-lock' : 'pi pi-lock-open',
+            acceptLabel: 'Sim',
+            rejectLabel: 'Não',
+            accept: () => {
+                axios
+                    .put(
+                        route('api.product.update', { id: productId }),
+                        {
+                            active: !productStatus
+                        },
+                        {
+                            headers: {
+                                'Authorization': 'Bearer ' + auth.token
+                            }
+                        }
+                    )
+                    .then((response) => {
+                        window.location.reload()
+                    })
+                    .catch((error) => {
+                        toast.current.show({ severity: 'error', summary: 'Erro', detail: 'Não foi possível alterar o status do produto.', life: 3000 });
+                    })
+            },
+        });
     }
 
     const showDeleteDialog = (productId) => {
