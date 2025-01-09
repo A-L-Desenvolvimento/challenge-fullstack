@@ -30,7 +30,7 @@ Route::prefix("auth")->controller(AuthController::class)->group(function () {
 
 // ROTAS DE PRODUTO
 
-Route::prefix("product")->controller(ProductController::class)->group(function () {
+Route::prefix("products")->controller(ProductController::class)->group(function () {
     // rotas abertas
     Route::get('/', 'list')->name('api.product.list');
     Route::get('/{id}', 'show')->name('api.product.show');
@@ -39,6 +39,6 @@ Route::prefix("product")->controller(ProductController::class)->group(function (
     Route::middleware('auth:sanctum')->group(function () {
         Route::post('/', 'store')->name('api.product.store');
         Route::put('/{id}', 'update')->name('api.product.update');
-        Route::delete('/destroy/{id}', 'destroy')->name('api.product.destroy');
+        Route::delete('/{id}', 'destroy')->name('api.product.destroy');
     });
 });

@@ -38,10 +38,6 @@ export default function ProductsList({ auth, products }) {
         if (auth.user) {
             items = items.concat([
                 {
-                    label: 'Editar',
-                    icon: 'pi pi-pencil',
-                },
-                {
                     label: rowData.active ? 'Desativar' : 'Ativar',
                     icon: rowData.active ? 'pi pi-lock' : 'pi pi-lock-open',
                     command: () => { showStatusDialog(rowData.id, rowData.active) }

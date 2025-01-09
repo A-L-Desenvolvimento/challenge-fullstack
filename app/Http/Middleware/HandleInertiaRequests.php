@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Middleware;
 
 class HandleInertiaRequests extends Middleware
@@ -29,11 +30,13 @@ class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request): array
     {
+        $token = Auth::check() ? $request->user()->createToken('access_token')->plainTextToken : null;
+
         return [
             ...parent::share($request),
             'auth' => [
                 'user' => $request->user(),
-                'token' => $request->user()->createToken('access_token')->plainTextToken
+                'token' => $token
             ],
         ];
     }

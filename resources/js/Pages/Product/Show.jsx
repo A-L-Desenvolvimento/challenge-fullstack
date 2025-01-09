@@ -19,10 +19,6 @@ export default function ProductShow({ auth, product }) {
 
         const items = [
             {
-                label: 'Editar',
-                icon: 'pi pi-pencil',
-            },
-            {
                 label: product.active ? 'Desativar' : 'Ativar',
                 icon: product.active ? 'pi pi-lock' : 'pi pi-lock-open',
                 command: () => { showStatusDialog(product.id, product.active) }

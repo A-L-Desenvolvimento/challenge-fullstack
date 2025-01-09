@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Product;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
+use Illuminate\Validation\ValidationException;
 
 class ProductController extends Controller
 {
@@ -13,7 +15,26 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        $product = Product::create($request->input());
+        try {
+            $data = $request->validate([
+                'name' => 'string',
+                'description' => 'string',
+                'price' => 'numeric',
+                'quantity' => 'integer',
+                'active' => 'boolean'
+            ]);
+
+            $product = Product::create($data);
+        } catch (ValidationException $th) {
+            return response()->json([
+                'message' => $th->getMessage(),
+                'errors' => $th->errors()
+            ], 422);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'message' => 'Não foi possível cadastrar o produto'
+            ], 500);
+        }
 
         return response()->json($product, 201);
     }
@@ -33,7 +54,17 @@ class ProductController extends Controller
      */
     public function show(string $id)
     {
-        $product = Product::find($id);
+        try {
+            $product = Product::findOrFail($id);
+        } catch (ModelNotFoundException $th) {
+            return response()->json([
+                'message' => 'Produto não encontrado'
+            ], 404);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'message' => 'Não foi possível buscar o produto'
+            ], 500);
+        }
 
         return response()->json($product);
     }
@@ -43,8 +74,18 @@ class ProductController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $product = Product::find($id);
-        $product->update($request->input());
+        try {
+            $product = Product::findOrFail($id);
+            $product->update($request->input());
+        } catch (ModelNotFoundException $th) {
+            return response()->json([
+                'message' => 'Produto não encontrado'
+            ], 404);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'message' => 'Não foi possível atualizar os dados do produto'
+            ], 500);
+        }
 
         return response()->json($product, 201);
     }
@@ -54,7 +95,18 @@ class ProductController extends Controller
      */
     public function destroy(string $id)
     {
-        Product::destroy($id);
+        try {
+            $product = Product::findOrFail($id);
+            $product->delete();
+        } catch (ModelNotFoundException $th) {
+            return response()->json([
+                'message' => 'Produto não encontrado'
+            ], 404);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'message' => 'Não foi possível excluir o produto'
+            ], 500);
+        }
 
         return response()->json()->setStatusCode(204);
     }
