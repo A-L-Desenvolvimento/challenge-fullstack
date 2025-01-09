@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ProductRequest;
 use App\Models\Product;
 use Illuminate\Http\Request;
 
@@ -13,35 +14,24 @@ class ProductController extends Controller
     public function index()
     {
 
-        $products = Product::query()
-        ->paginate(15)
-        ->toArray();
+        try {
+            $products = Product::query()
+                ->paginate(15)
+                ->toArray();
 
-        return response()->json($products);
+            return response()->json($products);
+        }catch (\Exception $e){
 
-    }
+            return response()->json($e, [500]);
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
+        }
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(ProductRequest $request)
     {
-        $request->validate([
-            'name' => 'required|string',
-            'description' => 'required|string',
-            'price' => 'required|numeric',
-            'quantity' => 'required|integer',
-            'active' => 'required|boolean',
-        ]);
-
         $product = Product::create($request->all());
 
         if ($product) {
@@ -57,23 +47,24 @@ class ProductController extends Controller
      */
     public function show(Product $product)
     {
-        //
-    }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Product $product)
-    {
-        //
+        if (!$product) {
+            return response()->json(['error' => 'Product not found'], 404);
+        }
+
+        return response()->json($product);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Product $product)
+    public function update(ProductRequest $request, Product $product)
     {
-        //
+
+        $product->update($request->all());
+
+        return response()->json($product);
+
     }
 
     /**
@@ -81,6 +72,8 @@ class ProductController extends Controller
      */
     public function destroy(Product $product)
     {
-        //
+        $product->delete();
+
+        return response()->json(null, 204);
     }
 }

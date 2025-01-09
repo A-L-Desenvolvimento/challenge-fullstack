@@ -18,6 +18,11 @@ class Product extends Model
         'active',
     ];
 
+    protected $hidden = [
+        'created_at',
+        'updated_at',
+    ];
+
     protected $casts = [
         'active' => 'boolean',
     ];

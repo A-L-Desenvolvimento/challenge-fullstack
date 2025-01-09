@@ -1,89 +1,93 @@
-# Desafio: Cadastro de Produtos
+# Product API
 
-**Atenção, Dev!**
+Este projeto é uma API de produto construída com PHP e Laravel. Inclui recursos para listar, criar, atualizar e excluir produtos, com autenticação e validação.
 
-Antes de "meter a mão na massa", leia com atenção todas as instruções abaixo.
+## Requisitos
 
+- PHP
+- Composer
+- NPM
+- MySql
 
-## Primeira Etapa - API (backend)
-1 - Configuração Inicial:
+## Bibliotecas
+- Passport
+  - Para a autenticação, foi utilizado o Laravel Passport, que fornece uma API completa para autenticação de usuários.
+  - Documentação: [Laravel Passport](https://laravel.com/docs/8.x/passport)
 
-- Crie um **fork** desse repositório.
-- Instale todas as dependências do projeto usando o Composer.
-- Crie um arquivo .env apropriado com base no arquivo .env.example fornecido e gere uma nova chave para a aplicação Laravel.
+## Frontend
+- O SPA que consome essa API está disponível dentro da pasta [challenge-frontend](./challenge-frontend) dentro deste repositório, na pasta `challenge-frontend` tem um README com as instruções de instalação e execução.
 
-2 - Modelo e Migração:
-
-- Crie um modelo e uma migração para uma entidade Product com os seguintes campos: id, name, description, price, quantity, active.
-- Execute a migração para criar a tabela correspondente no banco de dados.
-
-3 - Seeders e Factories:
-
-- Crie um seeder e uma factory para popular a tabela products com dados fictícios.
-- Execute o seeder para adicionar dados à tabela.
-
-4 - Rotas e Controladores:
-
-- Crie rotas RESTful para manipular recursos de produtos.
-- Crie um controlador ProductController com métodos para listar todos os produtos, exibir um único produto, criar um novo produto, atualizar um produto existente e excluir um produto.
-
-5 - Autenticação e Autorização:
-
-- Implemente autenticação de usuário.
-- Restrinja o acesso às rotas de criação, atualização e exclusão de produtos apenas para usuários autenticados.
-- Apenas usuários autenticados devem poder acessar as páginas de criação, edição e exclusão de produtos.
-
-6 - Testes Unitários:
-
-- Escreva testes unitários para pelo menos um método em seu controlador ProductController.
-- Use o PHPUnit para escrever e executar os testes.
-
-O retorno da consulta a API deve ser realizado em formato JSON e seguindo a estrutura abaixo:
-
-```
-{
-    id: 1,
-    name: 'Playstation 5',
-    description: 'Reproduza jogos do PS5 e do PS4 em Blu-ray Disc. Você também pode baixar jogos do PS5 e do PS4 digitais a partir da PlayStation Store.'
-    price: 3550, 
-    quantity: 100
-    active: true    
-},
+## Instalação via Docker
+- Para rodar a aplicação com Docker, utilize o seguinte comando:
+```sh
+  docker-compose up -d --build
 ```
 
-___
-## Segunda Etapa - SPA (frontend)
+Após a execução do comando, a aplicação estará disponível em [http://localhost:8000](http://localhost:8000).
+Será necessário rodar as migrations e os seeders para criar as tabelas e popular o banco de dados e configurar o Passport.
+```sh
+php artisan passport:install
+```
+**Nota:** Use o Client ID e o Client Secret gerados para configurar as variaveis de ambiente no arquivo `.env`.
+```sh
+PASSPORT_CLIENT_ID=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+PASSPORT_CLIENT_SECRET=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+```
 
-Para consumir os dados da API, você deverá criar uma SPA em ReactJS, pode ser isolado ou utilizando o Inertia no Laravel.
-Esta SPA deverá conter: 
-- Uma página para exibir todos os produtos cadastrados.
-- Uma página para exibir detalhes de um produto específico.
-- As páginas devem ser acessíveis através de rotas definidas na primeira etapa.
 
-Na **primeira rota**, cada linha da tabela deverá conter uma coluna "Ações".
-Dentro desta coluna, deverá haver um botão com um link para a **página de detalhes do produto**, onde serão exibidos todos os dados daquele produto.
 
-___
-## **O que vamos avaliar:**
+## Instalação manual
+ 
+1. Clone o repositorio:
 
-- Desempenho;
-- Manutenibilidade;
-- Organização e clareza do código;
-- Conhecimento ferramental;
-- Aplicação de boas práticas.
+2. Instale as dependencias PHP:
+    ```sh
+    composer install
+    ```
 
-___
-## **Para finalizar...**
-Se liga nessas informações importantes para o início e conclusão do desafio:
+3. Instale as dependencias JavaScript:
+    ```sh
+    npm install
+    ```
 
-- Crie um **fork** e desenvolva a sua solução nele.
-- Crie um **PROJECT.md** com a explicação de como devemos executar o projeto e o máximo de detalhes possível sobre o que foi feito e como foi feito (bibliotecas utilizadas, o porquê de utilizá-las, etc).
-- Após concluir todas as tarefas, faça um **pull request**.
-- Envie um E-mail para "**alexander@aldesenvolvimento.com.br**" com o link do seu **pull request** e com o assunto "**Challenge Accepted**".
+4. Copie o arquivo `.env` e configure as variaveis de ambiente:
+    ```sh
+    cp .env.example .env
+    ```
 
-Caso tenha alguma dívida, entre em contato conosco também através do E-mail "**alexander@aldesenvolvimento.com.br**".
-___
-### **Bom... Por enquanto é só isso tudo.**
+5. Gerar a chave da aplicação:
+    ```sh
+    php artisan key:generate
+    ```
 
-Um excelente desafio! o/
-#### **VAMBORA PRA CIMA!**
+6. Gerar as chaves de acesso do Passport:
+    ```sh
+    php artisan passport:install
+    ```
+   **Nota:** Use o Client ID e o Client Secret gerados para configurar as variaveis de ambiente no arquivo `.env`.
+    ```sh
+    PASSPORT_CLIENT_ID=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+    PASSPORT_CLIENT_SECRET=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+    ```
+   
+7. Inicie o servidor:
+    ```sh
+    php artisan serve
+    ```
+
+8. Migrar o banco de dados:
+    ```sh
+    php artisan migrate
+    ```
+9. Rode os Seeders:
+    ```sh
+    php artisan db:seed
+    ```
+
+## Rodando os testes
+Para rodar os testes, utilize o seguinte comando:
+```sh
+php artisan test
+```
+
+** Qualquer dúvida, entre em contato pelo e-mail **juninhomb2009@gmail.com**.
