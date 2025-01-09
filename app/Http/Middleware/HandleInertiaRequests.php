@@ -33,6 +33,7 @@ class HandleInertiaRequests extends Middleware
             ...parent::share($request),
             'auth' => [
                 'user' => $request->user(),
+                'token' => $request->user()->createToken('access_token')->plainTextToken
             ],
         ];
     }

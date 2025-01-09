@@ -7,8 +7,12 @@ import { Menu } from 'primereact/menu';
 import { useRef } from 'react';
 import { Badge } from 'primereact/badge';
 import { Tag } from 'primereact/tag';
+import { Toast } from 'primereact/toast';
+import { confirmDialog, ConfirmDialog } from 'primereact/confirmdialog';
 
 export default function ProductShow({ auth, product }) {
+    const toast = useRef(null);
+
     const MenuOptions = () => {
         const menu = useRef(null);
 
@@ -24,6 +28,7 @@ export default function ProductShow({ auth, product }) {
             {
                 label: 'Excluir',
                 icon: 'pi pi-trash',
+                command: () => { showDeleteDialog(product.id) }
             },
         ];
 
@@ -33,6 +38,35 @@ export default function ProductShow({ auth, product }) {
                 <i className="pi pi-ellipsis-v" onClick={(event) => menu.current.toggle(event)} aria-controls="popup_menu" aria-haspopup style={{ cursor: 'pointer' }}></i>
             </div>
         );
+    }
+
+    const showDeleteDialog = (productId) => {
+        confirmDialog({
+            group: 'templating',
+            header: 'Confirmar',
+            message: 'Tem certeza que deseja excluir esse produto?',
+            icon: 'pi pi-trash',
+            defaultFocus: 'reject',
+            acceptLabel: 'Sim',
+            rejectLabel: 'Não',
+            accept: () => {
+                axios
+                    .delete(
+                        route('api.product.destroy', { id: productId }),
+                        {
+                            headers: {
+                                'Authorization': 'Bearer ' + auth.token
+                            }
+                        }
+                    )
+                    .then((response) => {
+                        window.location.href = route('products.list')
+                    })
+                    .catch((error) => {
+                        toast.current.show({ severity: 'error', summary: 'Erro', detail: 'Não foi possível excluir o produto.', life: 3000 });
+                    })
+            },
+        });
     }
 
     const StatusBadge = () => {
@@ -47,6 +81,9 @@ export default function ProductShow({ auth, product }) {
             user={auth.user}
         >
             <Head title="Detalhes" />
+
+            <Toast ref={toast} />
+            <ConfirmDialog group='templating' />
 
             <div className="py-6">
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">

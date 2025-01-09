@@ -8,9 +8,13 @@ import { Column } from 'primereact/column';
 import { Tag } from 'primereact/tag';
 import { Menu } from "primereact/menu";
 import { useRef } from "react";
+import { Toast } from "primereact/toast";
+import { confirmDialog, ConfirmDialog } from "primereact/confirmdialog";
+import axios from "axios";
 
 
 export default function ProductsList({ auth, products }) {
+    const toast = useRef(null);
 
     const statusBodyTemplate = (rowData) => {
         const severity = rowData.active ? "success" : "danger";
@@ -26,7 +30,7 @@ export default function ProductsList({ auth, products }) {
             {
                 label: 'Detalhes',
                 icon: 'pi pi-external-link',
-                url: `/products/${rowData.id}`
+                url: route('products.show', { id: rowData.id })
             },
         ]
 
@@ -44,6 +48,7 @@ export default function ProductsList({ auth, products }) {
                 {
                     label: 'Excluir',
                     icon: 'pi pi-trash',
+                    command: () => { showDeleteDialog(rowData.id) }
                 },
             ])
         }
@@ -56,16 +61,48 @@ export default function ProductsList({ auth, products }) {
         )
     }
 
+    const showDeleteDialog = (productId) => {
+        confirmDialog({
+            group: 'templating',
+            header: 'Confirmar',
+            message: 'Tem certeza que deseja excluir esse produto?',
+            icon: 'pi pi-trash',
+            defaultFocus: 'reject',
+            acceptLabel: 'Sim',
+            rejectLabel: 'Não',
+            accept: () => {
+                axios
+                    .delete(
+                        route('api.product.destroy', { id: productId }),
+                        {
+                            headers: {
+                                'Authorization': 'Bearer ' + auth.token
+                            }
+                        }
+                    )
+                    .then((response) => {
+                        window.location.reload()
+                    })
+                    .catch((error) => {
+                        toast.current.show({ severity: 'error', summary: 'Erro', detail: 'Não foi possível excluir o produto.', life: 3000 });
+                    })
+            },
+        });
+    }
+
     return (
         <MainLayout
             user={auth.user}
         >
             <Head title="Produtos" />
 
+            <Toast ref={toast} />
+            <ConfirmDialog group='templating' />
+
             <div className="py-6">
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
                     <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                        <DataTable className='px-3 pt-3' value={products}>
+                        <DataTable className='px-3 pt-3' removableSort stripedRows value={products}>
                             <Column field="id" header="ID" sortable></Column>
                             <Column field="name" header="Nome" sortable></Column>
                             <Column field="quantity" header="Quantidade" sortable></Column>
