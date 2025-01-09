@@ -1,9 +1,8 @@
 <?php
 
+use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
-use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,9 +17,9 @@ use Inertia\Inertia;
 
 Route::redirect("/", "/produtos");
 
-Route::get('/produtos', function () {
-    return Inertia::render('Dashboard');
-})->name('produtos');
+Route::prefix("/produtos")->controller(ProductController::class)->group(function () {
+    Route::get("/", "index")->name("produtos");
+});
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
