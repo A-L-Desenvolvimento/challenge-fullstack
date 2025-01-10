@@ -18,9 +18,13 @@ Este projeto é uma API de produto construída com PHP e Laravel. Inclui recurso
 - O SPA que consome essa API está disponível dentro da pasta [challenge-frontend](./challenge-frontend) dentro deste repositório, na pasta `challenge-frontend` tem um README com as instruções de instalação e execução.
 
 ## Instalação via Docker
-- Para rodar a aplicação com Docker, utilize o seguinte comando:
+- Para rodar a aplicação com Docker via Laravel Sail, utilize o seguinte comando:
 ```sh
-  docker-compose up -d --build
+  #instalar as dependencias
+  composer install
+  
+  # montar o container
+  ./vendor/bin/sail up -d --build
 ```
 
 Após a execução do comando, a aplicação estará disponível em [http://localhost:8000](http://localhost:8000).
