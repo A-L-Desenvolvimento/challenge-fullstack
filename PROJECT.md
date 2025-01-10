@@ -225,4 +225,4 @@ Ordenação, filtragem e paginação melhoram a usabilidade e escalabilidade da 
 
 ## Considerações finais:
 
-Esse projeto foi desenvolvido com o objetivo de demonstrar habilidades em desenvolvimento fullstack. Espero que gostem :)
+Esse projeto foi desenvolvido com o objetivo de demonstrar habilidades em desenvolvimento fullstack.
