@@ -26,6 +26,7 @@ Antes de "meter a mão na massa", leia com atenção todas as instruções abaix
 
 - Crie rotas RESTful para manipular recursos de produtos.
 - Crie um controlador ProductController com métodos para listar todos os produtos, exibir um único produto, criar um novo produto, atualizar um produto existente e excluir um produto.
+- Aplique as seguintes regras de validação no cadastro e atualização de um produto: name é obrigatório, price é obrigatório e deve ser maior que 0 (zero), quantity é obrigatória e deve ser um número inteiro.
 
 5 - Autenticação e Autorização:
 
@@ -35,7 +36,7 @@ Antes de "meter a mão na massa", leia com atenção todas as instruções abaix
 
 6 - Testes Unitários:
 
-- Escreva testes unitários para pelo menos um método em seu controlador ProductController.
+- Escreva testes unitários para pelo menos um método em seu controlador ProductController, testando o sucesso e as falhas destes.
 - Use o PHPUnit para escrever e executar os testes.
 
 O retorno da consulta a API deve ser realizado em formato JSON e seguindo a estrutura abaixo:
@@ -58,6 +59,10 @@ Para consumir os dados da API, você deverá criar uma SPA em ReactJS, pode ser 
 Esta SPA deverá conter: 
 - Uma página para exibir todos os produtos cadastrados.
 - Uma página para exibir detalhes de um produto específico.
+- Uma página para criar um produo.
+- Uma página para editar um produto.
+- Implementar a remoção de um produto.
+- Uma página de Login do usuário.
 - As páginas devem ser acessíveis através de rotas definidas na primeira etapa.
 
 Na **primeira rota**, cada linha da tabela deverá conter uma coluna "Ações".
