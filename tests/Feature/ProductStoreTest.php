@@ -2,82 +2,113 @@
 
 namespace Tests\Feature;
 
-use App\Http\Controllers\Api\ProductController;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Http\Request;
+use App\Models\User;
 use Tests\TestCase;
 
 class ProductStoreTest extends TestCase
 {
-    public function test_cadastra_produto_input_vazio(): void
+    public function getUserAccessToken()
     {
-        $request = new Request();
+        $user = User::firstOrCreate(
+            [
+                "email" => "usuario@email.com",
+            ],
+            [
+                "name" => "Usuario",
+                "password" => "senha123"
+            ]
+        );
 
-        $controller = new ProductController();
+        $user->tokens()->delete();
 
-        $response = $controller->store($request)->getStatusCode();
+        return $user->createToken('accessToken')->plainTextToken;
+    }
 
-        $this->assertEquals(500, $response);
+    public function test_cadastra_produto_usuario_deslogado()
+    {
+        $this->json(
+            'post',
+            route('api.product.store'),
+            [
+                "name" => "Produto 1",
+                "price" => 19.90,
+                "quantity" => 10
+            ]
+        )->assertStatus(401);
     }
 
     public function test_cadastra_produto_price_invalido(): void
     {
-        $request = new Request();
-        $request->merge([
-            'price' => 'teste'
-        ]);
+        $token = $this->getUserAccessToken();
 
-        $controller = new ProductController();
-
-        $response = $controller->store($request)->getStatusCode();
-
-        $this->assertEquals(422, $response);
+        $this->json(
+            'post',
+            route('api.product.store'),
+            [
+                "name" => "Novo produto",
+                "price" => "caro",
+                "quantity" => 10
+            ],
+            [
+                'Authorization' => 'Bearer ' . $token
+            ]
+        )->assertStatus(422);
     }
 
     public function test_cadastra_produto_active_invalido(): void
     {
-        $request = new Request();
-        $request->merge([
-            'active' => 'teste'
-        ]);
+        $token = $this->getUserAccessToken();
 
-        $controller = new ProductController();
-
-        $response = $controller->store($request)->getStatusCode();
-
-        $this->assertEquals(422, $response);
+        $this->json(
+            'post',
+            route('api.product.store'),
+            [
+                "name" => "Novo produto",
+                "price" => 2.99,
+                "quantity" => 10,
+                "active" => "sim"
+            ],
+            [
+                'Authorization' => 'Bearer ' . $token
+            ]
+        )->assertStatus(422);
     }
 
     public function test_cadastra_produto_quantity_invalido(): void
     {
-        $request = new Request();
-        $request->merge([
-            'quantity' => 'teste'
-        ]);
+        $token = $this->getUserAccessToken();
 
-        $controller = new ProductController();
-
-        $response = $controller->store($request)->getStatusCode();
-
-        $this->assertEquals(422, $response);
+        $this->json(
+            'post',
+            route('api.product.store'),
+            [
+                "name" => "Novo produto",
+                "price" => 2.99,
+                "quantity" => "teste"
+            ],
+            [
+                'Authorization' => 'Bearer ' . $token
+            ]
+        )->assertStatus(422);
     }
 
     public function test_cadastra_produto_inputs_validos(): void
     {
-        $request = new Request();
-        $request->merge([
-            "name" => "Nome do produto",
-            "description" => "Um produto muito bom, recomendo bastante",
-            "price" => 298.99,
-            "quantity" => 2,
-            "active" => true
-        ]);
+        $token = $this->getUserAccessToken();
 
-        $controller = new ProductController();
-
-        $response = $controller->store($request)->getStatusCode();
-
-        $this->assertEquals(201, $response);
+        $this->json(
+            'post',
+            route('api.product.store'),
+            [
+                "name" => "Nome do produto",
+                "description" => "Um produto muito bom, recomendo bastante",
+                "price" => 298.99,
+                "quantity" => 2,
+                "active" => true
+            ],
+            [
+                'Authorization' => 'Bearer ' . $token
+            ]
+        )->assertStatus(201);
     }
 }
