@@ -1,0 +1,36 @@
+services:
+  postgres:
+    image: postgres:17
+    container_name: challenge-fullstack_db
+    environment:
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_DATABASE}
+    ports:
+      - ${DB_PORT}:5432
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    networks:
+      - challenge-fullstack-network
+
+  apache:
+    build: .
+    image: challenge-fullstack
+    container_name: challenge-fullstack
+    restart: always
+    ports:
+      - ${APP_PORT}:80
+    volumes:
+      - .:/var/www/html/challenge-fullstack
+    networks:
+      - challenge-fullstack-network
+    depends_on:
+      - postgres
+
+networks:
+  challenge-fullstack-network:
+    driver: bridge
+
+volumes:
+  db-data:
+    driver: local
